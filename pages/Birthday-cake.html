@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Cake with Interactive Candle</title>
+    <link rel="stylesheet" href="../style/cake.css">
+</head>
+<body>
+    <audio id="birthdayAudio" src="../music/birthday.mp3"></audio>
+
+    <div class="cake">
+        <button id="blowButton" class="blow-button">Blow Out Candle</button>
+        <button id="continueButton" class="continue-button">Continue</button>
+        <div class="plate"></div>
+        <div class="layer layer-bottom"></div>
+        <div class="layer layer-middle"></div>
+        <div class="layer layer-top"></div>
+        <div class="icing"></div>
+        <div class="drip drip1"></div>
+        <div class="drip drip2"></div>
+        <div class="drip drip3"></div>
+        <div class="candle">
+            <div class="flame" id="flame"></div>
+        </div>
+    </div>
+    
+    <div id="wishMessage" class="wish-message"></div>
+   
+    <script>
+        const flame = document.getElementById('flame');
+        const blowButton = document.getElementById('blowButton');
+        const continueButton = document.getElementById('continueButton');
+        const wishMessage = document.getElementById('wishMessage');
+       
+        let isLit = true;
+        let countdownActive = false;
+        
+        
+        async function toggleCandle() {
+            if (countdownActive) return;
+            
+            if (isLit) {
+                countdownActive = true;
+                blowButton.disabled = true;
+                
+                wishMessage.style.top = "20%";
+                
+                for (let i = 3; i > 0; i--) {
+                    wishMessage.textContent = i;
+                    wishMessage.classList.add('countdown', 'visible');
+                    await new Promise(r => setTimeout(r, 1000));
+                }
+                
+                wishMessage.classList.remove('countdown');
+                wishMessage.textContent = 'Make a wish!';
+                await new Promise(r => setTimeout(r, 2000));  
+                
+                flame.classList.add('blown-out');
+                wishMessage.textContent = 'Happy Birthday babe!!';
+                blowButton.style.display = 'none';
+                continueButton.style.display = 'block';
+                isLit = false;
+                countdownActive = false;
+                blowButton.disabled = false;
+                  
+                
+            } 
+        }
+        function goToNextPage() {
+            window.location.href = "card.html";
+        }
+        blowButton.addEventListener('click', toggleCandle);
+        continueButton.addEventListener('click', goToNextPage);
+    const audio = document.getElementById("birthdayAudio");
+    
+    document.body.addEventListener("click", () => {
+        audio.play().catch(error => console.log("Audio playback failed:", error));
+    }, { once: true }); // Ensures it only triggers once
+    </script>
+</body>
+</html>
